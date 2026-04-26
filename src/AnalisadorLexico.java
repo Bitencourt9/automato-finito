@@ -10,6 +10,21 @@ public class AnalisadorLexico {
     private static final int OPERADOR_ARITMETICO = 2;
     private static final int SIMBOLO_INVALIDO = 3;
 
+    private final int[][] tabela = {
+        { 1, -1,  5,  6, -1}, 
+        {-1,  2, -1, -1, -1}, 
+        { 3, -1, -1, -1, -1}, 
+        {-1,  0, -1, -1, -1}, 
+        {-1, -1, -1, -1, -1}, 
+        {-1, -1,  9,  7, -1}, 
+        {-1, -1, -1, -1,  5}, 
+        {-1, -1, -1, -1,  9}, 
+        {-1, -1, -1, -1, -1}, 
+        {-1, -1,  5,  6, -1}  
+    };
+
+    private final int[] EF = {0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
+
     public AnalisadorLexico() {
         this.tokens = new ArrayList<>();
         this.tokenAtual = new StringBuilder();
@@ -69,52 +84,26 @@ public class AnalisadorLexico {
         return c == ' ' || c == '\t' || c == '\r';
     }
 
+    private int mapearSimbolo(char c) {
+        switch (c) {
+            case 'a': return 0;
+            case 'b': return 1;
+            case 'c': return 2;
+            case 'd': return 3;
+            case 'e': return 4;
+            default: return -1;
+        }
+    }
+
     private boolean isValidoAFD(String palavra) {
         int estado = 0;
-
         for (int i = 0; i < palavra.length(); i++) {
-            char c = palavra.charAt(i);
-            switch (estado) {
-                case 0:
-                    if (c == 'a') estado = 1;
-                    else if (c == 'c') estado = 5;
-                    else if (c == 'd') estado = 6;
-                    else return false;
-                    break;
-                case 1:
-                    if (c == 'b') estado = 2;
-                    else return false;
-                    break;
-                case 2:
-                    if (c == 'a') estado = 3;
-                    else return false;
-                    break;
-                case 3:
-                    if (c == 'b') estado = 0;
-                    else return false;
-                    break;
-                case 5:
-                    if (c == 'c') estado = 9;
-                    else if (c == 'd') estado = 7;
-                    else return false;
-                    break;
-                case 6:
-                    if (c == 'e') estado = 5;
-                    else return false;
-                    break;
-                case 7:
-                    if (c == 'e') estado = 9;
-                    else return false;
-                    break;
-                case 9:
-                    if (c == 'c') estado = 5;
-                    else if (c == 'd') estado = 6;
-                    else return false;
-                    break;
-                default:
-                    return false;
-            }
+            int simbolo = mapearSimbolo(palavra.charAt(i));
+            if (simbolo == -1) return false;
+
+            estado = tabela[estado][simbolo];
+            if (estado == -1) return false;
         }
-        return (estado == 5);
+        return EF[estado] == 1;
     }
 }
