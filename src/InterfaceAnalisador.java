@@ -18,34 +18,36 @@ public class InterfaceAnalisador extends JFrame {
     private void inicializarInterface() {
         setTitle("Analisador Léxico - AFD para L = (ab)^n c^m (de)^p");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(900, 700);
         setLocationRelativeTo(null);
         setResizable(true);
 
-        JPanel painelPrincipal = new JPanel(new BorderLayout(10, 10));
+        JPanel painelPrincipal = new JPanel(new BorderLayout(5, 5));
         painelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel painelEntrada = criarPainelCampo("Campo A - Entrada", true);
+        JPanel painelEntrada = criarPainelCampo("Campo A - Entrada", true, 6);
         campoEntrada = (JTextArea) painelEntrada.getClientProperty("textArea");
 
-        JPanel painelBotoes = criarPainelBotoes();
-
-        JPanel painelSaida = criarPainelCampo("Campo B - Saída (Tokens)", false);
+        JPanel painelSaida = criarPainelCampo("Campo B - Saída (Tokens)", false, 25);
         campoSaida = (JTextArea) painelSaida.getClientProperty("textArea");
 
+        JPanel painelInferior = new JPanel(new BorderLayout());
+        JPanel painelBotoes = criarPainelBotoes();
+        painelInferior.add(painelBotoes, BorderLayout.CENTER);
+
         painelPrincipal.add(painelEntrada, BorderLayout.NORTH);
-        painelPrincipal.add(painelBotoes, BorderLayout.CENTER);
-        painelPrincipal.add(painelSaida, BorderLayout.SOUTH);
+        painelPrincipal.add(painelSaida, BorderLayout.CENTER);
+        painelPrincipal.add(painelInferior, BorderLayout.SOUTH);
 
         add(painelPrincipal);
         setVisible(true);
     }
 
-    private JPanel criarPainelCampo(String titulo, boolean editavel) {
+    private JPanel criarPainelCampo(String titulo, boolean editavel, int linhas) {
         JPanel painel = new JPanel(new BorderLayout());
         painel.setBorder(BorderFactory.createTitledBorder(titulo));
 
-        JTextArea textArea = new JTextArea(10, 50);
+        JTextArea textArea = new JTextArea(linhas, 50);
         textArea.setEditable(editavel);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
@@ -60,17 +62,16 @@ public class InterfaceAnalisador extends JFrame {
     }
 
     private JPanel criarPainelBotoes() {
-        JPanel painel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        painel.setBorder(BorderFactory.createTitledBorder("Controles"));
-
+        JPanel painel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        
         botaoAnalisar = new JButton("Analisar");
         botaoAnalisar.setFont(new Font("Arial", Font.BOLD, 12));
-        botaoAnalisar.setPreferredSize(new Dimension(120, 40));
+        botaoAnalisar.setPreferredSize(new Dimension(120, 30));
         botaoAnalisar.addActionListener(e -> executarAnalise());
 
         botaoLimpar = new JButton("Limpar");
         botaoLimpar.setFont(new Font("Arial", Font.BOLD, 12));
-        botaoLimpar.setPreferredSize(new Dimension(120, 40));
+        botaoLimpar.setPreferredSize(new Dimension(120, 30));
         botaoLimpar.addActionListener(e -> limparCampos());
 
         painel.add(botaoAnalisar);
