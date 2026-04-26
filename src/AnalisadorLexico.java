@@ -114,7 +114,7 @@ public class AnalisadorLexico {
                     if (c == 'a') estado = 1;
                     else if (c == 'c') { estado = 3; m++; }
                     else if (c == 'd') estado = 4;
-                    else return false; // Símbolo fora do padrão
+                    else return false;
                     break;
 
                 case 1:
